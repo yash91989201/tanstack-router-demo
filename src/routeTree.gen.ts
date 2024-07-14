@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as IndexImport } from './routes/index'
+import { Route as PokemonIdImport } from './routes/pokemon/$id'
 
 // Create/Update Routes
 
@@ -23,6 +24,11 @@ const ProfileRoute = ProfileImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PokemonIdRoute = PokemonIdImport.update({
+  path: '/pokemon/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,12 +50,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
+    '/pokemon/$id': {
+      id: '/pokemon/$id'
+      path: '/pokemon/$id'
+      fullPath: '/pokemon/$id'
+      preLoaderRoute: typeof PokemonIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute, ProfileRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  ProfileRoute,
+  PokemonIdRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -60,7 +77,8 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, ProfileRoute })
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/profile"
+        "/profile",
+        "/pokemon/$id"
       ]
     },
     "/": {
@@ -68,6 +86,9 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, ProfileRoute })
     },
     "/profile": {
       "filePath": "profile.tsx"
+    },
+    "/pokemon/$id": {
+      "filePath": "pokemon/$id.tsx"
     }
   }
 }
